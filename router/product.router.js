@@ -1,12 +1,15 @@
 const express = require('express')
 const router = express.Router()
+var bodyParser = require('body-parser')
 
+
+let counter = 125
 //Products
 const products = [
   { id: 123,name: "apple", color: "red", price: 40},
   { id: 124,name: "banana", color: "yellow", price: 20}
 ]
-
+router.use(bodyParser.json())
 
 router.get('/', (req, res) => {
   res.json({products})

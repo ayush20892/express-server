@@ -5,10 +5,13 @@ const app = express();
 var productRouter = require('./router/product.router.js')
 
 const port = 8000;
-let counter = 125;
+
+
+
+
 
 app.use('/products', productRouter)
-app.use(bodyParser.json())
+
 
 
 
