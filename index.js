@@ -1,13 +1,21 @@
 const express = require('express');
-var bodyParser = require('body-parser')
 var cors = require('cors')
-// const { appendFile, read } = require('node:fs');
 const app = express();
-var productRouter = require('./router/product.router.js')
+
+const { routeNotFound } = require('./middlewares/routeNotFound.js')
+const { errorHandler } = require('./middlewares/errorHandler.js')
+
+const { initializeDBConnection } = require('./db/db.connect.js')
 
 const port = 8000;
 
+var productRouter = require('./router/product.router.js');
+
+
+initializeDBConnection()
+
 app.use(cors())
+
 
 app.get('/', (req, res) => {
   res.send('Hello World! yess')
@@ -17,7 +25,11 @@ app.get('/', (req, res) => {
 app.use('/products', productRouter)
 
 
+app.use(routeNotFound)
+
+app.use(errorHandler)
+
 
 app.listen(process.env.PORT || port, () => {
-  console.log(`Example app listening on port ${port}!`)
+  console.log(`App listening on port ${port}!`)
 });

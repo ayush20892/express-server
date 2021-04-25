@@ -2,45 +2,46 @@ const express = require('express')
 const router = express.Router()
 var bodyParser = require('body-parser')
 
+const { Products } = require('../models/productModel.js')
+
 let counter = 125
 router.use(bodyParser.json())
-
-//Products DATA
-const products = [
-  { id: 123,name: "apple", color: "red", price: 40},
-  { id: 124,name: "banana", color: "yellow", price: 20}
-]
-
-
-// middleware
-const consoleParams = (req,res,next) => {
-  if(req.params)
-    console.log(req.params)
-  next()
-}
 
 
 // '/products'
 router.route('/')
-.get((req, res) => {
-  res.json({products})
+.get(async (req, res) => {
+  try{
+    const products = await Products.find({})
+    res.json({ success: true, products})
+  } catch(err) {
+    res.status(500).json({ success: false, message: "unable to get products", errorMessage: err.message})
+  }
 })
-.post((req, res) => {
-  const { name, color, price } = req.body
-  const newProduct = { id: counter++, name, color, price  }
-  products.push(newProduct)
+.post(async (req, res) => {
+  try {
+    const product = req.body
+    const newProduct = new Products(product)
+    const savedProduct = await newProduct.save()
 
-  res.json({succes: true, newProduct})
+    res.json({succes: true, product: savedProduct})
+  } catch {
+    res.status(500).json({ success: false, message: "Unable to add products", errorMessage: err.message })
+  }
 })
 
 
 
 // "/products/:id"
 router.route('/:id')
-.get(consoleParams,(req,res) => {
-  const { id } = req.params;
-  const product = products.find(item => item.id === parseInt(id,10))
-  res.json({ succes: 200, product })
+.get(async (req,res) => {
+  try{
+    const { id } = req.params;
+    const product = await Products.findOne({ _id: id})
+    res.json({ success: true, product })
+  } catch(err) {
+    res.status(500).json({ success: false, message: "Unable to get product by ID", errorMessage: err.message })
+  }
 })
 .post((req,res) => {
   const { id } = req.params
