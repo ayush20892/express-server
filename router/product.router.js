@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 
 const { Products } = require('../models/productModel.js')
 
+
 let counter = 125
 router.use(bodyParser.json())
 
@@ -33,6 +34,20 @@ router.route('/')
 
 
 // "/products/:id"
+router.param("id",async (req, res, next, id) => {
+  try {
+    const product = await Products.findById(id)
+
+    if(!product)
+      return res.status(400).json({ success: false, message: "Error getting product"})
+
+    req.product = product
+    next()
+  } catch (err) {
+    return res.status(400).json({ success: false, message: "Error getting product", errorMessage: err.message})
+  }
+})
+
 router.route('/:id')
 .get(async (req,res) => {
   try{
