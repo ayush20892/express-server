@@ -3,7 +3,7 @@ const router = express.Router()
 var bodyParser = require('body-parser')
 
 const { Products } = require('../models/productModel.js')
-
+const { EcomProducts } = require("../models/ecomproductModel.js")
 
 let counter = 125
 router.use(bodyParser.json())
@@ -13,7 +13,7 @@ router.use(bodyParser.json())
 router.route('/')
 .get(async (req, res) => {
   try{
-    const products = await Products.find({})
+    const products = await EcomProducts.find({})
     res.json({ success: true, products})
   } catch(err) {
     res.status(500).json({ success: false, message: "unable to get products", errorMessage: err.message})

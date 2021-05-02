@@ -26,14 +26,6 @@ app.get('/', (req, res) => {
 
 app.use('/products', productRouter)
 
-app.get("/menhalfSleeveTshirt" ,async (req,res) => {
-  try{
-    const products = await EcomProducts.find({})
-    res.json({ success: true, products})
-  } catch(err) {
-    res.status(500).json({ success: false, message: "unable to get products", errorMessage: err.message})
-  }
-})
 
 
 app.use(routeNotFound)
