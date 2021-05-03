@@ -7,7 +7,6 @@ const { errorHandler } = require('./middlewares/errorHandler.js')
 
 const { initializeDBConnection } = require('./db/db.connect.js')
 
-const { EcomProducts } = require("./models/ecomproductModel.js")
 
 const port = 8000;
 
