@@ -34,29 +34,24 @@ router.route('/')
 
 
 // "/products/:id"
-router.param("id",async (req, res, next, id) => {
-  try {
-    const product = await Products.findById(id)
+router.param("productId",async (req,res,next,productId) => {
+  try{
+    const product = await EcomProducts.findById(productId)
 
     if(!product)
-      return res.status(400).json({ success: false, message: "Error getting product"})
+      return res.status(400).json({ status: false, message: "Error getting product by Id"})
 
     req.product = product
     next()
-  } catch (err) {
-    return res.status(400).json({ success: false, message: "Error getting product", errorMessage: err.message})
+  } catch (err){
+    res.status(400).json({ status: false, message: err.message})
   }
 })
 
-router.route('/:id')
-.get(async (req,res) => {
-  try{
-    const { id } = req.params;
-    const product = await Products.findOne({ _id: id})
-    res.json({ success: true, product })
-  } catch(err) {
-    res.status(500).json({ success: false, message: "Unable to get product by ID", errorMessage: err.message })
-  }
+router.route('/:productId')
+.get((req,res) => {
+    let { product } = req
+    res.json({ success: true, product})
 })
 .post((req,res) => {
   const { id } = req.params
