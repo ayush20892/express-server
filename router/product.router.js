@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 var bodyParser = require('body-parser')
+const { extend } = require('loadash')
 
 const { Products } = require('../models/productModel.js')
 const { EcomProducts } = require("../models/ecomproductModel.js")
@@ -13,7 +14,7 @@ router.use(bodyParser.json())
 router.route('/')
 .get(async (req, res) => {
   try{
-    const products = await EcomProducts.find({})
+    const products = await Products.find({})
     res.json({ success: true, products})
   } catch(err) {
     res.status(500).json({ success: false, message: "unable to get products", errorMessage: err.message})
@@ -36,7 +37,7 @@ router.route('/')
 // "/products/:id"
 router.param("productId",async (req,res,next,productId) => {
   try{
-    const product = await EcomProducts.findById(productId)
+    const product = await Products.findById(productId)
 
     if(!product)
       return res.status(400).json({ status: false, message: "Error getting product by Id"})
@@ -51,6 +52,7 @@ router.param("productId",async (req,res,next,productId) => {
 router.route('/:productId')
 .get((req,res) => {
     let { product } = req
+    product.__v = undefined
     res.json({ success: true, product})
 })
 .post((req,res) => {
