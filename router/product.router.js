@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 var bodyParser = require('body-parser')
-const { extend } = require('loadash')
+const { extend } = require('lodash')
 
 const { Products } = require('../models/productModel.js')
 const { EcomProducts } = require("../models/ecomproductModel.js")
@@ -27,7 +27,7 @@ router.route('/')
     const savedProduct = await newProduct.save()
 
     res.json({succes: true, product: savedProduct})
-  } catch {
+  } catch (err){
     res.status(500).json({ success: false, message: "Unable to add products", errorMessage: err.message })
   }
 })
@@ -55,22 +55,20 @@ router.route('/:productId')
     product.__v = undefined
     res.json({ success: true, product})
 })
-.post((req,res) => {
-  const { id } = req.params
-  const updateProduct = req.body
+.post(async (req,res) => {
+    const updateProduct = req.body
+    let { product } = req
 
-  products.forEach(product => {
-    if(product.id === parseInt(id,10))
-    {
-      Object.keys(updateProduct).forEach(key => {
-        if(key in product) {
-          product[key] = updateProduct[key]
-        }
-      })
-    }
-  })
-  const product = products.find(item => item.id === parseInt(id,10))
-  res.json({ succes: true, product})
+    product = extend(product, updateProduct)
+
+    product = await product.save()
+    res.json({ success: true, product })
+})
+.delete(async (req,res) => {
+  let { product } = req;
+
+  product = await product.delete()
+  res.json({ succes: true, DeletedProduct: product})
 })
 
 
