@@ -7,6 +7,8 @@ const { errorHandler } = require('./middlewares/errorHandler.js')
 
 const { initializeDBConnection } = require('./db/db.connect.js')
 
+const { EcomProducts } = require("./models/ecomproductModel.js")
+
 
 const port = 8000;
 
@@ -25,6 +27,14 @@ app.get('/', (req, res) => {
 
 app.use('/products', productRouter)
 
+app.get('/ecom' ,async (req,res) => {
+  try{
+    const products = await EcomProducts.find({})
+    res.json({ success: true, products})
+  } catch(err) {
+    res.status(500).json({ success: false, message: "unable to get products", errorMessage: err.message})
+  }
+})
 
 
 app.use(routeNotFound)
