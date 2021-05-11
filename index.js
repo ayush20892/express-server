@@ -25,7 +25,7 @@ app.use(cors())
 
 app.get('/', (req, res) => {
   console.log(process.env.DB_USER)
-  res.send('Hello World! yess')
+  res.send(process.env.DB_USER)
 });
 
 
