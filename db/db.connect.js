@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const uri = "mongodb+srv://ayush20892:8777367407Aa@cluster0.er4pv.mongodb.net/inventory?retryWrites=true&w=majority"
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.er4pv.mongodb.net/inventory?retryWrites=true&w=majority`
 
 async function initializeDBConnection() {
   try{
