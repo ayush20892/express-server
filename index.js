@@ -18,7 +18,7 @@ var productRouter = require('./router/product.router.js');
 var categoryRouter = require('./router/category.router.js')
 
 const originlist = [
-  "https://unusual-ecom.netlify.app/",
+  "https://unusual-ecom.netlify.app",
   "http://localhost:8000",
 ];
 const corsOptions = {
