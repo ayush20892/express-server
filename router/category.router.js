@@ -26,5 +26,16 @@ router.route("/:categoryName")
   }
 })
 
+router.route('/:categoryName/:productType')
+.get(async (req,res) => {
+  try{
+    const { categoryName, productType } = req.params
+    const category = await Category.find({ categoryName: categoryName },`${productType}`)
+    res.json({ success: true, category })
+  } catch(err) {
+    res.status(500).json({ success: false, message: `Unable to get ${categoryName} category data of ${productType} typw`, errorMessage: err.message })
+  }
+})
+
 
 module.exports = router
