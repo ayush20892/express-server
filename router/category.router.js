@@ -38,4 +38,6 @@ router.route('/:categoryName/:productType')
 })
 
 
+
+
 module.exports = router
